@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('/label', LabelController::class);
+});
+
+Route::get('/test-database', function () {
+    try {
+        DB::connection()->getPdo();
+        print_r("Connected successfully to: " . DB::connection()->getDatabaseName());
+    } catch (\Exception $e) {
+        die("Could not connect to the database.  Please check your configuration. Error:" . $e );
+    }
 });
 
 require __DIR__.'/auth.php';
