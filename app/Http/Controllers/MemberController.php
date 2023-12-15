@@ -38,7 +38,7 @@ class MemberController extends Controller
         ];
 
         Member::create($attributes);
-        return redirect()->route('member.index');
+        return json_encode(["status"=>"success"]);
     }
 
     /**

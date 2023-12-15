@@ -30,17 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::resource('/member', MemberController::class);
 });
 
-Route::get('/test-database', function () {
-    try {
-        DB::connection()->getPdo();
-        print_r("Connected successfully to: " . DB::connection()->getDatabaseName());
-    } catch (\Exception $e) {
-        die("Could not connect to the database.  Please check your configuration. Error:" . $e );
-    }
-});
+Route::resource('/member', MemberController::class);
 
 require __DIR__.'/auth.php';
