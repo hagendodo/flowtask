@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\LabelController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Member;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -20,21 +21,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/track', function () {
-    return view('track');
-})->name('track');
-
-Route::get('/label', function () {
-    $datas = array();
-    return view('label.index', compact(['datas']));
-})->name('label');
-
-Route::get('/report', function () {
-    return view('report');
-})->name('report');
-
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $datas = Member::all();
+    return view('member.index', compact(['datas']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -42,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/label', LabelController::class);
+    Route::resource('/member', MemberController::class);
 });
 
 Route::get('/test-database', function () {

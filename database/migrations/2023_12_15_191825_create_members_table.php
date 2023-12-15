@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('history_labels', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('label_id')->constrained('labels');
-            $table->integer('estimation');
-            $table->integer('reality');
+            $table->string('nowa', 22);
+            $table->string('nama', 100);
+            $table->string('nim', 11);
+            $table->string('harapan', 512);
+            $table->string('bidang', 255);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('history_labels');
+        Schema::dropIfExists('members');
     }
 };

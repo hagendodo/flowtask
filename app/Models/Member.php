@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HistoryLabel extends Model
+class Member extends Model
 {
     use HasFactory;
 
-    protected $table = "history_labels";
+    protected $table = "members";
 
-    protected $fillable = ['label_id', 'estimation', 'reality'];
+    protected $fillable = ['nowa', 'nama', 'nim', 'harapan', 'bidang'];
 }
