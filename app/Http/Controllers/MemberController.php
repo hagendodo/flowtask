@@ -38,7 +38,7 @@ class MemberController extends Controller
         ];
 
         Member::create($attributes);
-        return json_encode(["status"=>"success"]);
+        return response()->json(['status' => 'success'], 200);
     }
 
     /**
