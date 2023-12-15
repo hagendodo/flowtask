@@ -36,7 +36,7 @@ class MemberController extends Controller
                 'nama' => $request->nama,
                 'nim' => $request->nim,
                 'harapan' => $request->harapan,
-                'bidang' => implode(', ', $request->bidang).$request->bidang_lainnya,
+                'bidang' => implode(', ', $request->bidang).", ".$request->bidang_lainnya,
             ];
 
             Member::create($attributes);
