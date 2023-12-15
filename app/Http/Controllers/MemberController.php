@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -29,16 +30,25 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = [
-            'nowa' => $request->nowa,
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'harapan' => $request->harapan,
-            'bidang' => implode(', ', $request->bidang).$request->bidang_lainnya,
-        ];
+        try {
+            $attributes = [
+                'nowa' => $request->nowa,
+                'nama' => $request->nama,
+                'nim' => $request->nim,
+                'harapan' => $request->harapan,
+                'bidang' => implode(', ', $request->bidang).$request->bidang_lainnya,
+            ];
 
-        Member::create($attributes);
-        return response()->json(['status' => 'success'], 200);
+            Member::create($attributes);
+
+            return response()->json(['status' => 'success'], 200);
+        } catch (QueryException $e) {
+            // Handle database-related exceptions
+            return response()->json(['status' => 'error', 'message' => 'Database error'], 500);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong'], 500);
+        }
     }
 
     /**
