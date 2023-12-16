@@ -13,9 +13,13 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $datas = Member::all();
-        return view('member.index', compact(['datas']));
+        $datas = Member::select('nim', 'nowa', 'nama', 'harapan', 'bidang')
+        ->distinct('nim')
+            ->get();
+
+        return view('member.index', compact('datas'));
     }
+
 
     /**
      * Show the form for creating a new resource.
