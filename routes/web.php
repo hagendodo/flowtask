@@ -30,6 +30,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/get-data', function(){
+        return DB::table('members as t1')
+            ->select([
+                DB::raw('ROW_NUMBER() OVER (ORDER BY created_at) AS row_num'),
+                'nim',
+                'nowa',
+                'nama',
+                'harapan',
+                'bidang',
+                DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
+            ])
+            ->where('created_at', function ($query) {
+                $query->select(DB::raw('MIN(created_at)'))
+                    ->from('members as t2')
+                    ->whereColumn('t1.nim', 't2.nim')
+                    ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
+            })
+            ->get();
+    });
 });
 
 Route::middleware('cors')->resource('/member', MemberController::class);

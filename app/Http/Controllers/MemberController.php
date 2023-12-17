@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -13,8 +14,22 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $datas = Member::select('nim', 'nowa', 'nama', 'harapan', 'bidang')
-        ->distinct('nim')
+        $datas = DB::table('members as t1')
+            ->select([
+                DB::raw('ROW_NUMBER() OVER (ORDER BY created_at) AS row_num'),
+                'nim',
+                'nowa',
+                'nama',
+                'harapan',
+                'bidang',
+                DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
+            ])
+            ->where('created_at', function ($query) {
+                $query->select(DB::raw('MIN(created_at)'))
+                    ->from('members as t2')
+                    ->whereColumn('t1.nim', 't2.nim')
+                    ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
+            })
             ->get();
 
         return view('member.index', compact('datas'));

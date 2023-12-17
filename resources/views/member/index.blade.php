@@ -25,6 +25,9 @@
                     <th scope="col">
                         Bidang
                     </th>
+                    <th scope="col">
+                        Waktu Pendaftaran
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,6 +50,9 @@
                         </td>
                         <td>
                             {{ $data->bidang }}
+                        </td>
+                        <td>
+                            {{ $data->waktu_pendaftaran }}
                         </td>
                     </tr>
                 @endforeach
