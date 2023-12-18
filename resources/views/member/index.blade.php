@@ -34,7 +34,7 @@
                 @foreach ($datas as $data)
                     <tr>
                         <td class="text-center">
-                            {{ $loop->iteration }}
+                            {{ ($datas->currentPage() - 1) * $datas->perPage() + $loop->index + 1 }}
                         </td>
                         <td>
                             {{ $data->nowa }}
