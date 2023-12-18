@@ -14,24 +14,7 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $datas = DB::table('members as t1')
-            ->select([
-                'nim',
-                'nowa',
-                'nama',
-                'harapan',
-                'bidang',
-                DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
-            ])
-            ->where('created_at', function ($query) {
-                $query->select(DB::raw('MIN(created_at)'))
-                    ->from('members as t2')
-                    ->whereColumn('t1.nim', 't2.nim')
-                    ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
-            })
-            ->get();
 
-        return view('member.index', compact('datas'));
     }
 
 
