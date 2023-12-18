@@ -58,7 +58,7 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $datas->link() }}
+            {{ $datas->links() }}
         </div>
     </div>
 </x-content>
