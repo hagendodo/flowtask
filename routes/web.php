@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $datas = DB::table('members as t1')
+    $datas = DB::table('members')
         ->select([
             'nim',
             'nowa',
@@ -31,12 +31,6 @@ Route::get('/dashboard', function () {
             'bidang',
             DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
         ])
-        ->where('created_at', function ($query) {
-            $query->select(DB::raw('MIN(created_at)'))
-                ->from('members as t2')
-                ->whereColumn('t1.nim', 't2.nim')
-                ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
-        })
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
 
@@ -59,9 +53,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/get-data', function(){
-        return DB::table('members as t1')
+        return DB::table('members')
             ->select([
-                DB::raw('ROW_NUMBER() OVER (ORDER BY created_at) AS row_num'),
                 'nim',
                 'nowa',
                 'nama',
@@ -69,12 +62,7 @@ Route::middleware('auth')->group(function () {
                 'bidang',
                 DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
             ])
-            ->where('created_at', function ($query) {
-                $query->select(DB::raw('MIN(created_at)'))
-                    ->from('members as t2')
-                    ->whereColumn('t1.nim', 't2.nim')
-                    ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
-            })
+            ->orderBy('waktu_pendaftaran')
             ->get();
     });
 });
