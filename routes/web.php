@@ -39,7 +39,9 @@ Route::get('/dashboard', function () {
         })
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
-    return view('member.index', compact(['datas']));
+
+    $total = Member::where(DB::raw('LENGTH(nim)'), '>', 8)->distinct()->count('nim');
+    return view('member.index', compact(['datas', 'total']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/total-member', function () {
