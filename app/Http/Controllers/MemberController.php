@@ -53,9 +53,23 @@ class MemberController extends Controller
                 'nowa' => $request->nowa,
                 'nama' => $request->nama,
                 'nim' => $request->nim,
-                'harapan' => $request->harapan,
-                'bidang' => implode(', ', $request->bidang).", ".$request->bidang_lainnya,
+                'harapan' => "",
+                'bidang' => ""
             ];
+
+            if (isset($request->harapan)) {
+                $attributes['harapan'] = $request->harapan;
+            }
+
+            if (isset($request->bidang)) {
+                $bidangValues = is_array($request->bidang) ? implode(', ', $request->bidang) : '';
+
+                if (isset($request->bidang_lainnya)) {
+                    $bidangValues .= ($bidangValues ? ', ' : '') . $request->bidang_lainnya;
+                }
+
+                $attributes['bidang'] = $bidangValues;
+            }
 
             Member::create($attributes);
 
