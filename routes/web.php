@@ -60,7 +60,7 @@ Route::get('/all-members', function () {
 })->middleware(['auth', 'verified'])->name('all_members');
 
 Route::get('/total-member', function () {
-    $total = DB::table('members')->count();
+    $total = DB::table('total_members')->where('id', 1)->value('total');
     return response()->json([
         'data' => [
             'total' => $total,
