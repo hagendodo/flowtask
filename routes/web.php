@@ -43,7 +43,7 @@ Route::get('/show-total', function () {
 })->middleware(['auth', 'verified'])->name('show_total');
 
 Route::get('/all-members', function () {
-    $datas = DB::table('all_members')
+    $datas = DB::table('members')
         ->select([
             'nim',
             'nowa',
@@ -52,7 +52,7 @@ Route::get('/all-members', function () {
             'bidang',
             'created_at',
         ])
-        ->orderBy('waktu_pendaftaran', 'desc')
+        ->orderBy('created_at', 'desc')
         ->paginate(10);
 
     $total = DB::table('total_members')->where('id', 1)->value('total');
