@@ -33,11 +33,12 @@ Route::get('/dashboard', function () {
         ])
         ->get();
 
-    return view('index', compact(['datas']));
+    $total = DB::table('total_members')->where('id', 1)->value('total');
+    return view('index', compact(['datas', 'total']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/show-total', function () {
-    $total = DB::table('members')->count();
+    $total = DB::table('total_members')->where('id', 1)->value('total');
     return view('total', compact(['total']));
 })->middleware(['auth', 'verified'])->name('show_total');
 
@@ -54,7 +55,7 @@ Route::get('/all-members', function () {
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
 
-    $total = DB::table('members')->count();
+    $total = DB::table('total_members')->where('id', 1)->value('total');
     return view('member.index', compact(['datas', 'total']));
 })->middleware(['auth', 'verified'])->name('all_members');
 
@@ -71,20 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/get-data', function(){
-        return DB::table('members')
-            ->select([
-                'nim',
-                'nowa',
-                'nama',
-                'harapan',
-                'bidang',
-                "created_at AS waktu_pendaftaran",
-            ])
-            ->orderBy('waktu_pendaftaran')
-            ->get();
-    });
 
     Route::get('/cek-member/{nim}', function ($nim) {
         $memberExists = Member::where('nim', $nim)->exists();

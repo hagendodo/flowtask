@@ -1,6 +1,6 @@
 <x-content>
     <x-slot name="title">
-        {{ __('Latest 5 Member BSO Dimensi Web') }}
+        {{ __('Latest 5 Member BSO Dimensi Web') }} ({{ $total }} Orang Terdaftar)
     </x-slot>
     <div class="row p-4">
         <div class="col-12 mb-4">
