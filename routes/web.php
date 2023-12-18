@@ -22,7 +22,23 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $datas = Member::all();
+    $datas = DB::table('members as t1')
+        ->select([
+            'nim',
+            'nowa',
+            'nama',
+            'harapan',
+            'bidang',
+            DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
+        ])
+        ->where('created_at', function ($query) {
+            $query->select(DB::raw('MIN(created_at)'))
+                ->from('members as t2')
+                ->whereColumn('t1.nim', 't2.nim')
+                ->whereRaw('LENGTH(t1.nim) > 8 AND LENGTH(t1.nowa) > 8');
+        })
+        ->orderBy('waktu_pendaftaran', 'desc')
+        ->paginate(10);
     return view('member.index', compact(['datas']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 

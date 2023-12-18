@@ -16,7 +16,6 @@ class MemberController extends Controller
     {
         $datas = DB::table('members as t1')
             ->select([
-                DB::raw('ROW_NUMBER() OVER (ORDER BY created_at) AS row_num'),
                 'nim',
                 'nowa',
                 'nama',

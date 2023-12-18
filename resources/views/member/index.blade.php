@@ -58,6 +58,7 @@
                 @endforeach
                 </tbody>
             </table>
+            {{ $datas->link() }}
         </div>
     </div>
 </x-content>
