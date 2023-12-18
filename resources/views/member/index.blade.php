@@ -58,7 +58,9 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $datas->links() }}
+            <div class="d-flex justify-end">
+                {{ $datas->links() }}
+            </div>
         </div>
     </div>
 </x-content>
