@@ -22,7 +22,27 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $datas = DB::table('members')
+    $datas = DB::table('last_members')
+        ->select([
+            'nim',
+            'nowa',
+            'nama',
+            'harapan',
+            'bidang',
+            'created_at',
+        ])
+        ->get();
+
+    return view('index', compact(['datas']));
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/show-total', function () {
+    $total = DB::table('members')->count();
+    return view('total', compact(['total']));
+})->middleware(['auth', 'verified'])->name('show_total');
+
+Route::get('/all-members', function () {
+    $datas = DB::table('all_members')
         ->select([
             'nim',
             'nowa',
@@ -34,12 +54,12 @@ Route::get('/dashboard', function () {
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
 
-    $total = Member::count();
+    $total = DB::table('members')->count();
     return view('member.index', compact(['datas', 'total']));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('all_members');
 
 Route::get('/total-member', function () {
-    $total = Member::count();
+    $total = DB::table('members')->count();
     return response()->json([
         'data' => [
             'total' => $total,
