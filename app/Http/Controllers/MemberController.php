@@ -50,6 +50,8 @@ class MemberController extends Controller
                 DB::table('last_members')->limit(1)->delete();
 
                 DB::table('last_members')->insert($memberData);
+
+                DB::update('UPDATE total_members SET total = total + 1 WHERE id = ?', [1]);
             });
 
             return response()->json(['status' => 'success'], 200);
