@@ -52,7 +52,7 @@
                             {{ $data->bidang }}
                         </td>
                         <td>
-                            {{ $data->waktu_pendaftaran }}
+                            {{ $data->created_at }}
                         </td>
                     </tr>
                 @endforeach
