@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
             'nama',
             'harapan',
             'bidang',
-            DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
+            'created_at',
         ])
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
                 'nama',
                 'harapan',
                 'bidang',
-                DB::raw("CONVERT_TZ(created_at, 'UTC', 'Asia/Jakarta') AS waktu_pendaftaran"),
+                "created_at AS waktu_pendaftaran",
             ])
             ->orderBy('waktu_pendaftaran')
             ->get();
