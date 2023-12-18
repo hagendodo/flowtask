@@ -34,12 +34,12 @@ Route::get('/dashboard', function () {
         ->orderBy('waktu_pendaftaran', 'desc')
         ->paginate(10);
 
-    $total = Member::where(DB::raw('LENGTH(nim)'), '>', 8)->distinct()->count('nim');
+    $total = Member::count();
     return view('member.index', compact(['datas', 'total']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/total-member', function () {
-    $total = Member::where(DB::raw('LENGTH(nim)'), '>', 8)->distinct()->count('nim');
+    $total = Member::count();
     return response()->json([
         'data' => [
             'total' => $total,
@@ -64,6 +64,12 @@ Route::middleware('auth')->group(function () {
             ])
             ->orderBy('waktu_pendaftaran')
             ->get();
+    });
+
+    Route::get('/cek-member/{nim}', function ($nim) {
+        $memberExists = Member::where('nim', $nim)->exists();
+
+        return response()->json(['exists' => $memberExists]);
     });
 });
 
