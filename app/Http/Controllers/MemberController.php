@@ -32,36 +32,30 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         try {
-            $attributes = [
+            $now = now()->setTimezone('Asia/Jakarta');
+
+            $memberData = [
                 'nowa' => $request->nowa,
                 'nama' => $request->nama,
                 'nim' => $request->nim,
-                'harapan' => "",
-                'bidang' => ""
+                'harapan' => $request->input('harapan', ''),
+                'bidang' => $request->input('bidang', ''),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
 
-            if (isset($request->harapan)) {
-                $attributes['harapan'] = $request->harapan;
-            }
+            DB::transaction(function () use ($memberData) {
+                DB::table('members')->insert($memberData);
 
-            if (isset($request->bidang)) {
-                $bidangValues = is_array($request->bidang) ? implode(', ', $request->bidang) : '';
+                DB::table('last_members')->limit(1)->delete();
 
-                if (isset($request->bidang_lainnya)) {
-                    $bidangValues .= ($bidangValues ? ', ' : '') . $request->bidang_lainnya;
-                }
-
-                $attributes['bidang'] = $bidangValues;
-            }
-
-            Member::create($attributes);
+                DB::table('last_members')->insert($memberData);
+            });
 
             return response()->json(['status' => 'success'], 200);
         } catch (QueryException $e) {
-            // Handle database-related exceptions
             return response()->json(['status' => 'error', 'message' => 'Database error'], 500);
         } catch (\Exception $e) {
-            // Handle other exceptions
             return response()->json(['status' => 'error', 'message' => 'Something went wrong'], 500);
         }
     }
