@@ -42,6 +42,15 @@ Route::get('/dashboard', function () {
     return view('member.index', compact(['datas']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/total-member', function () {
+    $total = Member::where('length', '>', 8)->distinct()->count('nim');
+    return response()->json([
+        'data' => [
+            'total' => $total,
+        ],
+    ]);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
