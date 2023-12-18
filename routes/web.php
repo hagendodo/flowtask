@@ -43,7 +43,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/total-member', function () {
-    $total = Member::where('length', '>', 8)->distinct()->count('nim');
+    $total = Member::where(DB::raw('LENGTH(nim)'), '>', 8)->distinct()->count('nim');
     return response()->json([
         'data' => [
             'total' => $total,
